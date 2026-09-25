@@ -90,6 +90,16 @@ hr { border-color: #1f1f2b !important; }
 """
 st.markdown(CSS, unsafe_allow_html=True)
 
+import base64
+def load_logo():
+    try:
+        with open('assets/logo_b64.txt') as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        return None
+LOGO_B64 = load_logo()
+
+
 
 def render_stepper(active_idx, done_idx):
     html = '<div class="stepper">'
@@ -122,10 +132,15 @@ def result_page(inner_html):
 
 st.title("Find your next customers")
 st.caption("Enter your company URL — we'll research your market, out-position your competitors, and hand you ready-to-send outreach with real contacts.")
+st.markdown('<div style="display:flex;gap:16px;margin:14px 0 22px 0;font-size:13px;color:#888"><span>1. Enter your URL</span><span style="color:#333">→</span><span>2. We research your market</span><span style="color:#333">→</span><span>3. Get outreach with real contacts</span><span style="color:#555;margin-left:8px">· ~90 seconds</span></div>', unsafe_allow_html=True)
 
 with st.sidebar:
-    st.markdown("### 🎯 Prospect Intelligence")
+    if LOGO_B64:
+        st.markdown(f'<div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><img src="data:image/png;base64,{LOGO_B64}" style="height:22px"><span style="font-size:15px;font-weight:600;color:#eee">Prospect Intelligence</span></div>', unsafe_allow_html=True)
+    else:
+        st.markdown("### 🎯 Prospect Intelligence")
     st.caption("Fully hands-off prospecting")
+    st.markdown('<div style="margin-top:24px;padding-top:16px;border-top:1px solid #1f1f2b"><a href="https://kuppelabs.com" target="_blank" style="color:#666;font-size:11px;text-decoration:none">Built by Kuppe Labs</a></div>', unsafe_allow_html=True)
     company_slot = st.empty()
 
 url = st.text_input("Your company URL", placeholder="https://yourcompany.com", label_visibility="collapsed")
